@@ -23,8 +23,12 @@ To install it, open command prompt in the folder you downloaded PyGame to by Shi
 with the filename completed for the file you downloaded. 
 
 ##4. Install PyCharm Python IDE##
-Finally, install the latest PyCharm Community IDE from 
+Install the latest PyCharm Community IDE from
 [https://www.jetbrains.com/pycharm/](https://www.jetbrains.com/pycharm/)
+
+##5. Install TortoiseSVN
+Install the latest TortoiseSVN with command line option installed.
+[https://tortoisesvn.net/downloads.html](https://tortoisesvn.net/downloads.html)
 
 
 
