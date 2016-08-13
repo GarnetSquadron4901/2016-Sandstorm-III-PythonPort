@@ -10,8 +10,8 @@ from Algorithms import PID
 class DriveBase(Command):
 
     MODE_DISABLED = 'Disabled'
-    MODE_ARCADE_COMBINED = 'Joystick 0 - Arcade'
-    MODE_ARCADE_SPLIT = 'Joystick 0,1 - Arcade'
+    MODE_ARCADE_COMBINED = 'Joystick 0 - Single joystick arcade'
+    MODE_ARCADE_SPLIT = 'Joystick 0,1 - Split arcade'
     MODE_TANK = 'Joystick 0,1 - Tank'
     MODE_ENCODER = 'Encoder target'
     MODE_VISION = 'Vision target'
@@ -109,6 +109,7 @@ class DriveBase(Command):
             self.encoder_event.wait()
 
     def do_command(self, left_output, right_output, enable_safety=True):
+        self.mode = self.MODE_COMMAND
         self.set_safety_enabled(enable_safety)
         self.feed_safety_watchdog()
         self.left_output_command = left_output
@@ -123,13 +124,13 @@ class DriveBase(Command):
                self.right_encoeer_target + self.encoder_tolerance
 
     def set_safety_enabled(self, enable):
-        self.safety_config = enable
+        self.safety_config = bool(enable)
 
     def feed_safety_watchdog(self):
         self.last_update = time.time()
 
     def check_safety(self):
-        if self.last_update + self.timeout < time.time():
+        if self.safety_config is True and self.last_update + self.timeout < time.time():
             self.mode = self.MODE_TIMEOUT
 
     def print_drivebase(self, msg):
@@ -177,7 +178,7 @@ class DriveBase(Command):
                     Uses right joystick for spin left/right
                 """
                 arcade_speeds = self.ArcadeDriveCalc(x=self.devices.driver_station.left_joystick.get_x(),
-                                                     y=self.devices.driver_station.left_joystick.get_y())
+                                                     y=self.devices.driver_station.right_joystick.get_y())
 
                 # Set the motor output
                 left_speed = arcade_speeds.left_speed

@@ -12,6 +12,7 @@ class PID_Base:
         self.integrator = 0.0
         self.output = 0.0
         self.error = 0.0
+        self.last_error = None
         self.processvar = 0.0
         self.setpoint = 0.0
         self.old_update_time = None
@@ -98,8 +99,13 @@ class PID_Base:
     def calc_D(self, error=None):
         if error is None:
             error = self.error
-        return ((error - self.last_error) / self.dT) * self.Kd
-
+        if self.last_error is not None:
+            d = ((error - self.last_error) / self.dT) * self.Kd
+            self.last_error = self.error
+            return d
+        else:
+            return 0
+    # TODO: Fix this. It doesn't work
     def reset(self):
         self.output = 0.0
         self.integrator = 0.0

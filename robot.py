@@ -55,7 +55,6 @@ class MyRobot(wpilib.IterativeRobot):
         wpilib.LiveWindow.run()
         Scheduler.getInstance().run()
 
-
     def disabledInit(self):
         self.disabled_mode.init()
 

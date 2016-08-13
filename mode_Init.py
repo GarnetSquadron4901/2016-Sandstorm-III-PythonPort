@@ -4,11 +4,13 @@ from Devices.General import Potentiometer, LimitSwitch
 from Devices.Joysticks.Logitech.Attack3 import LogitechAttack3
 from Devices.Maxbotix.MB10x0 import MB10x0_Digital
 from Devices.RevRobotics.AnalogPressureSensor import AnalogPressureSensor
+from Devices.GarnetSquadron import GarnetControls
 from Subsystems.subsystem_Arm import Arm
 from Subsystems.subsystem_DriveBase import DriveBase
 from Subsystems.subsystem_DriverStation import DriverStation
 from Subsystems.subsystem_EndEffector import EndEffector
 from Subsystems.subsystem_Pneumatics import Pneumatics
+
 
 class InitRobot:
     def __init__(self):
@@ -53,15 +55,13 @@ class Devices:
 
     class InitPneumatics:
         def __init__(self):
-            self.compressor = wpilib.Compressor()
-            self.shooter = wpilib.Solenoid(channel=0)
-            self.grip = wpilib.Solenoid(channel=1)
-            self.arm_lock = wpilib.DoubleSolenoid(forwardChannel=2, reverseChannel=3)
+          pass
 
     class InitDriverStation:
         def __init__(self):
             self.left_joystick = LogitechAttack3(0)
             self.right_joystick = LogitechAttack3(1)
+            self.control_board = GarnetControls()
 
 
 class Subsystems:
