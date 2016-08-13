@@ -119,9 +119,9 @@ class DriveBase(Command):
         return self.left_encoder_target - self.encoder_tolerance <= \
                self.devices.sensors.left_drive_encoder.getDistance() <= \
                self.left_encoder_target + self.encoder_tolerance and \
-               self.right_encoeer_target - self.encoder_tolerance <= \
+               self.right_encoder_target - self.encoder_tolerance <= \
                self.devices.sensors.right_drive_encoder.getDistance() <= \
-               self.right_encoeer_target + self.encoder_tolerance
+               self.right_encoder_target + self.encoder_tolerance
 
     def set_safety_enabled(self, enable):
         self.safety_config = bool(enable)
