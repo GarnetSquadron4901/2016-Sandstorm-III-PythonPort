@@ -2,7 +2,8 @@ import wpilib
 from wpilib.command import Command
 import mode_Init
 from Algorithms.PID import PID_Position
-
+from networktables import NetworkTable
+import logging
 
 class Arm(Command):
 
@@ -29,13 +30,14 @@ class Arm(Command):
     PID_I_MAX = 1
     PID_I_MIN = -1
 
-
     def start(self, devices):
         """
         :param devices: mode_Init:Devices
         """
         self.devices = devices
         super().start()
+
+
 
     def initialize(self):
         self.mode = self.MODE_DISABLED
@@ -50,6 +52,7 @@ class Arm(Command):
                                 integrator_min=self.PID_I_MIN,
                                 output_max=self.PID_OUT_MAX,
                                 output_min=self.PID_OUT_MIN)
+
 
 
     def do_mode_disabled(self):
@@ -76,6 +79,25 @@ class Arm(Command):
     def execute(self):
 
         self.check_mode()
+
+        getSwitch = self.devices.driver_station.control_board.getSwitch
+        if getSwitch(1):
+            self.do_mode_preset(self.PRESET_SHOOT_BATTER)
+
+        elif getSwitch(2):
+            self.do_mode_preset(self.PRESET_SHOOT_CLOSE)
+
+        elif getSwitch(3):
+            self.do_mode_preset(self.PRESET_CROSS_DEFENSE)
+
+        elif getSwitch(4):
+            self.do_mode_preset(self.PRESET_HUMAN_PLAYER_LOAD)
+
+        elif getSwitch(5):
+            self.do_mode_preset(self.PRESET_LOW_BAR_GOAL)
+
+        elif getSwitch(6):
+            self.do_mode_manual()
 
         try:
             output = 0

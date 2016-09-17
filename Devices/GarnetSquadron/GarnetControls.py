@@ -15,7 +15,7 @@ class GarnetControls:
     LED_IN = 'LED'
 
     def __init__(self, address='localhost', flush_period=20e-3):
-        self.nt = NetworkTable.getTable('GarnetControls')
+        self.nt = NetworkTable.getTable('DriverStationControlBoard')
 
         self.sw_vals_out = BooleanArray()
         self.led_vals_in = BooleanArray()
@@ -44,11 +44,11 @@ class GarnetControls:
 
 
     def getAnalog(self, ch):
-        self.nt.getValue(self.ANALOG_OUT, self.ana_vals_out)
+        self.ana_vals_out = self.nt.getValue(self.ANALOG_OUT, self.ana_vals_out)
         return self.ana_vals_out[ch]
 
     def getSwitch(self, ch):
-        self.nt.getValue(self.SWITCH_OUT, self.sw_vals_out)
+        self.sw_vals_out = self.nt.getValue(self.SWITCH_OUT, self.sw_vals_out)
         return self.sw_vals_out[ch]
 
     def putPWM(self, ch, val):
