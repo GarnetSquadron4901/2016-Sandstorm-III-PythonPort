@@ -128,7 +128,7 @@ class PID_Position(PID_Base):
         d = self.calc_D()
         self.output = self.coerce(p + i + d, self.o_min, self.o_max)
 
-        return self.output()
+        return self.output
 
 
 class PID_Speed(PID_Base):
