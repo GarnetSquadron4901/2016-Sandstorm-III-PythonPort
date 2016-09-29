@@ -57,6 +57,10 @@ class DriveBase(Command):
         self.left_encoder_target = 0
         self.right_encoder_target = 0
 
+        # True is Forward/Normal
+        # False is Reversed
+        self.orientation = True
+
         # Encoder mode objects
         self.encoder_Kp = 0
         self.encoder_Ki = 0
@@ -172,6 +176,8 @@ class DriveBase(Command):
                 left_speed = arcade_speeds.left_speed
                 right_speed = arcade_speeds.right_speed
 
+                (left_speed, right_speed) = self.orientation_switcher(left_speed, right_speed)
+
             elif self.mode is self.MODE_ARCADE_SPLIT:
                 """
                     Uses left joystick for forward/reverse
@@ -234,6 +240,19 @@ class DriveBase(Command):
 
         self.devices.motors.left_drive.set(left_speed)
         self.devices.motors.right_drive.set(right_speed)
+
+    def orientation_switcher(self, l, r):
+
+        if self.devices.driver_station.right_joystick.getButtonByName(self.devices.driver_station.right_joystick.BUTTON_BOTTOM_10):
+            self.orientation = False
+        elif self.devices.driver_station.right_joystick.getButtonByName(self.devices.driver_station.right_joystick.BUTTON_BOTTOM_11):
+            self.orientation = True
+
+        if self.orientation ^ self.devices.driver_station.right_joystick.getButtonByName(self.devices.driver_station.right_joystick.BUTTON_THUMB_2):
+            l *= -1
+            r *= -1
+
+        return (l, r)
 
     def end(self):
         self.devices.motors.left_drive.set(0)
