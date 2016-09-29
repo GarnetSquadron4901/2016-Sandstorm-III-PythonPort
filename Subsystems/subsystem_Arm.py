@@ -42,6 +42,7 @@ class Arm(Command):
     def initialize(self):
         self.mode = self.MODE_DISABLED
         self.last_mode = None
+        self.last_preset = None
 
         self.calc_manual_conversion()
 
@@ -99,28 +100,28 @@ class Arm(Command):
         elif getSwitch(6):
             self.do_mode_manual()
 
-        try:
+        # try:
+        output = 0
+        if self.mode is self.MODE_DISABLED:
             output = 0
-            if self.mode is self.MODE_DISABLED:
-                output = 0
 
-            elif self.mode is self.MODE_MANUAL:
-                self.angle = self.get_manual_angle()
-                self.pid.set_setpoint(self.angle)
-                self.pid.update(self.devices.sensors.arm_angle_sensor.getAngle())
-                output = self.pid.get_output()
+        elif self.mode is self.MODE_MANUAL:
+            self.angle = self.get_manual_angle()
+            self.pid.set_setpoint(self.angle)
+            self.pid.update(self.devices.sensors.arm_angle_sensor.getAngle())
+            output = self.pid.get_output()
 
-            elif self.mode is self.MODE_PRESET:
-                self.check_preset()
-                self.angle = self.preset['Angle']
-                self.pid.set_setpoint(self.angle)
-                self.pid.update(self.devices.sensors.arm_angle_sensor.getAngle())
-                output = self.pid.get_output()
+        elif self.mode is self.MODE_PRESET:
+            self.check_preset()
+            self.angle = self.preset['Angle']
+            self.pid.set_setpoint(self.angle)
+            self.pid.update(self.devices.sensors.arm_angle_sensor.getAngle())
+            output = self.pid.get_output()
 
-            self.devices.motors.arm.set(output)
+        self.devices.motors.arm.set(output)
 
-        except Exception as e:
-            print('Unhandled exception', e)
+        # except Exception as e:
+        #     print('Unhandled exception', e)
 
     def check_mode(self):
         if self.mode != self.last_mode:
